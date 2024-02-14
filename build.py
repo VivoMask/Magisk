@@ -470,7 +470,7 @@ def find_jdk():
 def build_apk(args, module):
     env = find_jdk()
 
-    build_type = "Release" if args.release else "Debug"
+    build_type = "Release"
     proc = execv(
         [
             gradlew,
@@ -497,7 +497,7 @@ def build_app(args):
 
     # Stub building is directly integrated into the main app
     # build process. Copy the stub APK into output directory.
-    build_type = "release" if args.release else "debug"
+    build_type = "release"
     apk = f"stub-{build_type}.apk"
     source = op.join("app", "src", build_type, "assets", "stub.apk")
     target = op.join(config["outdir"], apk)
@@ -579,7 +579,7 @@ def setup_ndk(args):
 
 def push_files(args, script):
     abi = cmd_out([adb_path, "shell", "getprop", "ro.product.cpu.abi"])
-    apk = config["outdir"] + ("/app-release.apk" if args.release else "/app-debug.apk")
+    apk = config["outdir"] + ("/app-release.apk")
 
     # Extract busybox from APK
     busybox = f'{config["outdir"]}/busybox'
