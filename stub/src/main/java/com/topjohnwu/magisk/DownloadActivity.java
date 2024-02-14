@@ -47,7 +47,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class DownloadActivity extends Activity {
 
-    private static final String APP_NAME = "Kitsune Mask";
+    private static final String APP_NAME = "VivoMask";
     private static final String JSON_URL = BuildConfig.DEBUG ?
             "https://huskydg.github.io/magisk-files/debug.json" :
             "https://huskydg.github.io/magisk-files/canary.json";
