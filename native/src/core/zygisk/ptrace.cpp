@@ -23,6 +23,8 @@
 #include <base.hpp>
 #include <selinux.hpp>
 
+using namespace std;
+
 #if defined(__LP64__)
 # define LP_SELECT(lp32, lp64) lp64
 #else
@@ -193,16 +195,17 @@ bool trace_zygote(int pid, const char *libpath) {
     }
     WAIT_OR_DIE
     if (STOPPED_WITH(SIGSTOP, PTRACE_EVENT_STOP)) {
-        char rstr[20] = { 0 };
+        char rstr[25] = { 0 };
+        sprintf(rstr, "/dev/");
 
         do {
-            gen_rand_str(rstr, sizeof(rstr));
-        } while (access(("/dev/"s + rstr).data(), F_OK) == 0);
-        close(xopen(("/dev/"s + rstr).data(), O_RDONLY | O_CREAT | O_CLOEXEC, 0));
-        xmount(libpath, ("/dev/"s + rstr).data(), nullptr, MS_BIND, nullptr);
-        bool is_injected = inject_on_main(pid, ("/dev/"s + rstr).data());
-        umount2(("/dev/"s + rstr).data(), MNT_DETACH);
-        rm_rf(("/dev/"s + rstr).data());
+            gen_rand_str(rstr + 5, sizeof(rstr) - 5);
+        } while (access(rstr, F_OK) == 0);
+        close(xopen(rstr, O_RDONLY | O_CREAT | O_CLOEXEC, 0));
+        xmount(libpath, rstr, nullptr, MS_BIND, nullptr);
+        bool is_injected = inject_on_main(pid, rstr);
+        umount2(rstr, MNT_DETACH);
+        rm_rf(rstr);
 
         if (!is_injected) {
             ZLOGE("failed to inject\n");

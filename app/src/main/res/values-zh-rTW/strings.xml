@@ -256,5 +256,4 @@
     <string name="settings_sulist_enforced">SuList 已強制執行</string>
     <string name="settings_sulist_error_magiskhide">此功能需要啟用 MagiskHide</string>
     <string name="home_notice_unofficial_magisk">基於@HuskyDG R6687BB53-Kitsune修改su為suu，適用部分vivo</string>
-
 </resources>
